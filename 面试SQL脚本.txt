@@ -1,0 +1,35 @@
+1、实现Mysql 数库表设计，支持中文存储。
+1.1 部门表
+CREATE TABLE `department` (
+  `id` int(64) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT NULL,
+  `work_desc` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+1.2 员工表
+CREATE TABLE `staff` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `sex` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `age` int(11) NOT NULL,
+  `moblie` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `work_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `department_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+2、支持手机号数据脱敏。
+SELECT
+CONCAT(LEFT(moblie, 3), '****' , RIGHT(moblie, 4)) AS phone
+FROM staff;
+
+3、SQL 统计各部门的员工人数。
+SELECT a.`name`As 部门名称 ,IFNULL(b.num,0) AS 数量 FROM department AS a LEFT JOIN(SELECT department_id,COUNT(*) AS num 
+FROM staff b GROUP BY department_id) AS b ON a.id=b.department_id 
+4、SQL 查询每个部门年龄最大的员工。
+SELECT * FROM staff st  RIGHT  JOIN 
+(SELECT s.department_id as did ,max(s.age) as sage  FROM staff s GROUP BY s.department_id) t on t.did=st.department_id and t.sage=st.age ;
+
+5、SQL 手机号模糊查询。
+SELECT NAME FROM staff 
+WHERE  before_moblie LIKE '18%'
